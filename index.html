@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background-color: #f4f1ea; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        button { padding: 10px; margin: 5px; font-size: 16px; cursor: pointer; border: none; background: #8B4513; color: white; border-radius: 5px; }
+        button:hover { background: #A0522D; }
+        img { width: 100px; height: auto; display: block; margin: 10px auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Coffee Shop ☕</h1>
+        <p>Select a beverage:</p>
+        
+        <h2>Coffee Menu</h2>
+        <button onclick="orderItem('latte')">Latte - ₹150</button>
+        <button onclick="orderItem('capaccino')">Capaccino - ₹200</button>
+        <button onclick="orderItem('espresso')">Espresso - ₹100</button>
+        <button onclick="orderItem('americano')">Americano - ₹120</button>
+        <button onclick="orderItem('mocha')">Mocha - ₹180</button>
+        <button onclick="orderItem('macchiato')">Macchiato - ₹170</button>
+        <button onclick="orderItem('flat_white')">Flat White - ₹160</button>
+        <button onclick="orderItem('irish_coffee')">Irish Coffee - ₹250</button>
+        <button onclick="orderItem('ristretto')">Ristretto - ₹110</button>
+        <button onclick="orderItem('affogato')">Affogato - ₹220</button>
+        <button onclick="orderItem('turkish_coffee')">Turkish Coffee - ₹180</button>
+        
+        <h2>Tea Menu</h2>
+        <button onclick="orderItem('green_tea')">Green Tea - ₹90</button>
+        <button onclick="orderItem('black_tea')">Black Tea - ₹80</button>
+        <button onclick="orderItem('masala_chai')">Masala Chai - ₹100</button>
+        
+        <h2>Snacks</h2>
+        <button onclick="orderItem('cookie')">Cookie - ₹50</button>
+        <button onclick="orderItem('croissant')">Croissant - ₹120</button>
+        <button onclick="orderItem('muffin')">Muffin - ₹100</button>
+        
+        <p id="status"></p>
+    </div>
+
+    <script>
+        let resources = { water: 500, milk: 250, coffee: 100, chocolate: 50, sugar: 50, whiskey: 50, ice_cream: 50, tea: 100, flour: 100 };
+        let profit = 0;
+        const menu = {
+            latte: { ingredients: { water: 200, milk: 150, coffee: 24 }, cost: 150 },
+            capaccino: { ingredients: { water: 250, milk: 100, coffee: 24 }, cost: 200 },
+            espresso: { ingredients: { water: 50, coffee: 18 }, cost: 100 },
+            americano: { ingredients: { water: 300, coffee: 20 }, cost: 120 },
+            mocha: { ingredients: { water: 200, milk: 100, coffee: 20, chocolate: 20 }, cost: 180 },
+            macchiato: { ingredients: { water: 100, milk: 50, coffee: 24 }, cost: 170 },
+            flat_white: { ingredients: { water: 200, milk: 150, coffee: 24 }, cost: 160 },
+            irish_coffee: { ingredients: { water: 200, coffee: 24, sugar: 10, whiskey: 30 }, cost: 250 },
+            ristretto: { ingredients: { water: 30, coffee: 18 }, cost: 110 },
+            affogato: { ingredients: { coffee: 24, ice_cream: 50 }, cost: 220 },
+            turkish_coffee: { ingredients: { water: 200, coffee: 25, sugar: 10 }, cost: 180 },
+            green_tea: { ingredients: { water: 250, tea: 5 }, cost: 90 },
+            black_tea: { ingredients: { water: 250, tea: 5 }, cost: 80 },
+            masala_chai: { ingredients: { water: 200, milk: 50, tea: 5, sugar: 10 }, cost: 100 },
+            cookie: { ingredients: { flour: 20, sugar: 10 }, cost: 50 },
+            croissant: { ingredients: { flour: 50, butter: 20 }, cost: 120 },
+            muffin: { ingredients: { flour: 50, sugar: 20, milk: 30 }, cost: 100 }
+        };
+
+        function checkResources(order) {
+            for (let item in order) {
+                if (order[item] > resources[item]) {
+                    document.getElementById('status').innerText = `Sorry, not enough ${item}.`;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function orderItem(type) {
+            let item = menu[type];
+            if (checkResources(item.ingredients)) {
+                let payment = prompt(`Please insert ₹${item.cost}`);
+                if (parseInt(payment) >= item.cost) {
+                    profit += item.cost;
+                    for (let ingredient in item.ingredients) {
+                        resources[ingredient] -= item.ingredients[ingredient];
+                    }
+                    let change = payment - item.cost;
+                    document.getElementById('status').innerText = `Here is your ${type}. Change: ₹${change}`;
+                } else {
+                    document.getElementById('status').innerText = `Not enough money. You need ₹${item.cost - payment} more.`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
